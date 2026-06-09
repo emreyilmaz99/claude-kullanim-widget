@@ -16,9 +16,13 @@ public static class WinCur {
 
 $baseDir    = Join-Path $env:USERPROFILE "claude-usage-widget"
 
-# Tek instance: zaten calisiyorsa cik
+# Tek instance: zaten calisiyorsa, mevcut pencereyi one getir ve bu kopya ciksin
 $script:mutex = New-Object System.Threading.Mutex($false, "Local\ClaudeUsageWidgetSingleton")
-if (-not $script:mutex.WaitOne(0)) { exit }
+if (-not $script:mutex.WaitOne(0)) {
+  try { ([System.Threading.EventWaitHandle]::OpenExisting("Local\ClaudeUsageWidgetShow")).Set() } catch {}
+  exit
+}
+$script:showEvent = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\ClaudeUsageWidgetShow")
 
 $credPath   = Join-Path $env:USERPROFILE ".claude\.credentials.json"
 $projectsDir= Join-Path $env:USERPROFILE ".claude\projects"
@@ -31,7 +35,7 @@ $profileUrl = "https://api.anthropic.com/api/oauth/profile"
         Title="Claude Usage" WindowStyle="None" AllowsTransparency="True"
         Background="Transparent" Topmost="True" ResizeMode="NoResize"
         SizeToContent="WidthAndHeight" ShowInTaskbar="False"
-        Left="40" Top="40" Opacity="0.93">
+        Left="40" Top="40" Opacity="0.97">
   <Grid>
 
     <!-- ================= TAM PANEL ================= -->
@@ -150,27 +154,27 @@ $profileUrl = "https://api.anthropic.com/api/oauth/profile"
     </Border>
 
     <!-- ================= KUCULTULMUS YUVARLAK ================= -->
-    <Border x:Name="Mini" Margin="16" Width="66" Height="66" CornerRadius="33" Visibility="Collapsed" Cursor="Hand" ToolTip="Ac">
+    <Border x:Name="Mini" Margin="16" Width="84" Height="84" CornerRadius="42" Visibility="Collapsed" Cursor="Hand" ToolTip="Ac">
       <Border.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-          <GradientStop Color="#FA242430" Offset="0"/>
-          <GradientStop Color="#FA15151C" Offset="1"/>
+          <GradientStop Color="#FF2A2A38" Offset="0"/>
+          <GradientStop Color="#FF17171F" Offset="1"/>
         </LinearGradientBrush>
       </Border.Background>
       <Border.BorderBrush>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-          <GradientStop Color="#553A7BFF" Offset="0"/>
-          <GradientStop Color="#22FFFFFF" Offset="1"/>
+          <GradientStop Color="#AA4C8DFF" Offset="0"/>
+          <GradientStop Color="#44FFFFFF" Offset="1"/>
         </LinearGradientBrush>
       </Border.BorderBrush>
-      <Border.BorderThickness>1</Border.BorderThickness>
-      <Border.Effect><DropShadowEffect Color="#000000" BlurRadius="20" ShadowDepth="0" Opacity="0.55"/></Border.Effect>
+      <Border.BorderThickness>1.5</Border.BorderThickness>
+      <Border.Effect><DropShadowEffect Color="#4C8DFF" BlurRadius="26" ShadowDepth="0" Opacity="0.65"/></Border.Effect>
       <Grid>
-        <Ellipse Width="48" Height="48" Stroke="#FF2C2C36" StrokeThickness="6"/>
-        <Path x:Name="ArcMini" Stroke="#FF4C8DFF" StrokeThickness="6" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
-          <Path.Effect><DropShadowEffect Color="#4C8DFF" BlurRadius="8" ShadowDepth="0" Opacity="0.75"/></Path.Effect>
+        <Ellipse Width="62" Height="62" Stroke="#FF3C3C4A" StrokeThickness="8"/>
+        <Path x:Name="ArcMini" Stroke="#FF5C9CFF" StrokeThickness="8" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+          <Path.Effect><DropShadowEffect Color="#5C9CFF" BlurRadius="14" ShadowDepth="0" Opacity="0.9"/></Path.Effect>
         </Path>
-        <TextBlock x:Name="PctMini" Text="0%" Foreground="#FFF2F2F6" FontSize="14" FontWeight="SemiBold"
+        <TextBlock x:Name="PctMini" Text="0%" Foreground="#FFFFFFFF" FontSize="19" FontWeight="Bold"
                    FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center"/>
       </Grid>
     </Border>
@@ -191,6 +195,7 @@ foreach ($n in 'Full','Mini','Initial','UserName','PlanText','PlanBadge','MinBtn
 
 $script:cur  = @{ A=0.0; B=0.0; C=0.0 }
 $script:tgt  = @{ A=0.0; B=0.0; C=0.0 }
+$script:everOk = $false
 
 # ---------- halka cizimi ----------
 function Get-ArcGeometry([double]$pct, [double]$cx, [double]$cy, [double]$r) {
@@ -219,7 +224,7 @@ function Draw-Rings {
     $ctrl["Arc$k"].Data = Get-ArcGeometry $script:cur[$k] 39 39 32
     $ctrl["Pct$k"].Text = ("{0:0}%" -f $script:cur[$k])
   }
-  $ctrl.ArcMini.Data = Get-ArcGeometry $script:cur['A'] 33 33 25
+  $ctrl.ArcMini.Data = Get-ArcGeometry $script:cur['A'] 42 42 31
   $ctrl.PctMini.Text = ("{0:0}%" -f $script:cur['A'])
 }
 
@@ -266,10 +271,15 @@ function Update-Usage {
     if ($r7) { $parts += "7d: $r7" }
     $ctrl.Resets.Text = ($parts -join "   ")
     $ctrl.Status.Text = "updated " + (Get-Date -Format "HH:mm")
+    $script:everOk = $true
     $script:animTimer.Start()
   } catch {
-    if ($_.Exception.Message -match '401') { $ctrl.Status.Text = "token expired - open Claude Code" }
-    else { $ctrl.Status.Text = "offline" }
+    # Hata: mevcut halka degerlerini KORU (sifirlama)
+    $msg = $_.Exception.Message
+    if     ($msg -match '401') { $ctrl.Status.Text = "token expired - open Claude Code" }
+    elseif ($msg -match '429') { $ctrl.Status.Text = "limit (429) - birazdan tekrar" }
+    else   { $ctrl.Status.Text = "baglanti yok" }
+    if (-not $script:everOk) { $ctrl.Status.Text += " (ilk veri bekleniyor)" }
   }
 }
 
@@ -364,8 +374,17 @@ $win.Add_MouseMove({
   $pt = New-Object WinCur+POINT; [void][WinCur]::GetCursorPos([ref]$pt)
   $ddx = $pt.X - $script:dragStartX; $ddy = $pt.Y - $script:dragStartY
   if ([math]::Abs($ddx) -gt 3 -or [math]::Abs($ddy) -gt 3) { $script:dragMoved = $true }
-  $win.Left = $script:winStartLeft + ($ddx / $script:dpi)
-  $win.Top  = $script:winStartTop  + ($ddy / $script:dpi)
+  $nl = $script:winStartLeft + ($ddx / $script:dpi)
+  $nt = $script:winStartTop  + ($ddy / $script:dpi)
+  # ekran sinirlari icinde tut (kaybolmasin)
+  $vsL = [System.Windows.SystemParameters]::VirtualScreenLeft
+  $vsT = [System.Windows.SystemParameters]::VirtualScreenTop
+  $vsW = [System.Windows.SystemParameters]::VirtualScreenWidth
+  $vsH = [System.Windows.SystemParameters]::VirtualScreenHeight
+  $w = $win.ActualWidth; $h = $win.ActualHeight
+  $nl = [math]::Max($vsL, [math]::Min($nl, $vsL + $vsW - $w))
+  $nt = [math]::Max($vsT, [math]::Min($nt, $vsT + $vsH - $h))
+  $win.Left = $nl; $win.Top = $nt
 })
 $win.Add_MouseLeftButtonUp({
   if (-not $script:drag) { return }
@@ -376,7 +395,7 @@ $win.Add_MouseLeftButtonUp({
 })
 
 $win.Add_MouseEnter({ try { $a = New-Object System.Windows.Media.Animation.DoubleAnimation(1.0, ([timespan]::FromMilliseconds(150))); $win.BeginAnimation([System.Windows.UIElement]::OpacityProperty, $a) } catch {} })
-$win.Add_MouseLeave({ try { $a = New-Object System.Windows.Media.Animation.DoubleAnimation(0.93, ([timespan]::FromMilliseconds(200))); $win.BeginAnimation([System.Windows.UIElement]::OpacityProperty, $a) } catch {} })
+$win.Add_MouseLeave({ try { $a = New-Object System.Windows.Media.Animation.DoubleAnimation(0.97, ([timespan]::FromMilliseconds(200))); $win.BeginAnimation([System.Windows.UIElement]::OpacityProperty, $a) } catch {} })
 
 $win.Add_Loaded({
   Load-Profile
@@ -385,8 +404,21 @@ $win.Add_Loaded({
 })
 
 $refreshTimer = New-Object System.Windows.Threading.DispatcherTimer
-$refreshTimer.Interval = [TimeSpan]::FromSeconds(60)
+$refreshTimer.Interval = [TimeSpan]::FromSeconds(90)
 $refreshTimer.Add_Tick({ Update-Usage })
 $refreshTimer.Start()
+
+# ikinci kez baslatildiginda mevcut pencereyi one getir + gorunur konuma al
+$showTimer = New-Object System.Windows.Threading.DispatcherTimer
+$showTimer.Interval = [TimeSpan]::FromMilliseconds(400)
+$showTimer.Add_Tick({
+  if ($script:showEvent -and $script:showEvent.WaitOne(0)) {
+    $ctrl.Mini.Visibility = 'Collapsed'; $ctrl.Full.Visibility = 'Visible'
+    $win.Left = 40; $win.Top = 40
+    $win.Topmost = $false; $win.Topmost = $true
+    [void]$win.Activate()
+  }
+})
+$showTimer.Start()
 
 [void]$win.ShowDialog()
