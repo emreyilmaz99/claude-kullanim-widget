@@ -1,0 +1,6 @@
+# yerel calisma dosyalari
+history.csv
+debug.log
+stderr.log
+task_stdout.log
+*.log
