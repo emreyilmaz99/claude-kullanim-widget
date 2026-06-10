@@ -273,12 +273,19 @@ function Update-Usage {
     $ctrl.Status.Text = "updated " + (Get-Date -Format "HH:mm")
     $script:everOk = $true
     $script:animTimer.Start()
+    if ($refreshTimer) { $refreshTimer.Interval = [TimeSpan]::FromSeconds(120) }   # basari: normal arali ga don
   } catch {
     # Hata: mevcut halka degerlerini KORU (sifirlama)
     $msg = $_.Exception.Message
-    if     ($msg -match '401') { $ctrl.Status.Text = "token expired - open Claude Code" }
-    elseif ($msg -match '429') { $ctrl.Status.Text = "limit (429) - birazdan tekrar" }
-    else   { $ctrl.Status.Text = "baglanti yok" }
+    if     ($msg -match '401') { $ctrl.Status.Text = "token expired - open Claude Code"; if ($refreshTimer) { $refreshTimer.Interval = [TimeSpan]::FromSeconds(120) } }
+    elseif ($msg -match '429') {
+      # ust el geri cekilme: 120 -> 240 -> 480 -> 600 (cap)
+      $cur = if ($refreshTimer) { $refreshTimer.Interval.TotalSeconds } else { 120 }
+      $next = [math]::Min([math]::Max($cur * 2, 240), 600)
+      if ($refreshTimer) { $refreshTimer.Interval = [TimeSpan]::FromSeconds($next) }
+      $ctrl.Status.Text = "limit (429) - $([int]$next)sn sonra tekrar"
+    }
+    else { $ctrl.Status.Text = "baglanti yok"; if ($refreshTimer) { $refreshTimer.Interval = [TimeSpan]::FromSeconds(120) } }
     if (-not $script:everOk) { $ctrl.Status.Text += " (ilk veri bekleniyor)" }
   }
 }
@@ -404,7 +411,7 @@ $win.Add_Loaded({
 })
 
 $refreshTimer = New-Object System.Windows.Threading.DispatcherTimer
-$refreshTimer.Interval = [TimeSpan]::FromSeconds(90)
+$refreshTimer.Interval = [TimeSpan]::FromSeconds(120)
 $refreshTimer.Add_Tick({ Update-Usage })
 $refreshTimer.Start()
 
