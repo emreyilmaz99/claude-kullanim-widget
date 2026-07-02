@@ -37,148 +37,239 @@ $profileUrl = "https://api.anthropic.com/api/oauth/profile"
         SizeToContent="WidthAndHeight" ShowInTaskbar="False"
         Left="40" Top="40" Opacity="0.97">
   <Grid>
-
-    <!-- ================= TAM PANEL ================= -->
-    <Border x:Name="Full" Margin="16" CornerRadius="18" Width="300">
+    <Border x:Name="Full" Margin="18" CornerRadius="20" Width="312" BorderThickness="1">
       <Border.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-          <GradientStop Color="#FA242430" Offset="0"/>
-          <GradientStop Color="#FA15151C" Offset="1"/>
+          <GradientStop Color="#FB222634" Offset="0"/>
+          <GradientStop Color="#FC181A24" Offset="0.55"/>
+          <GradientStop Color="#FD111219" Offset="1"/>
         </LinearGradientBrush>
       </Border.Background>
       <Border.BorderBrush>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-          <GradientStop Color="#553A7BFF" Offset="0"/>
-          <GradientStop Color="#22FFFFFF" Offset="1"/>
+          <GradientStop Color="#664C8DFF" Offset="0"/>
+          <GradientStop Color="#22FFFFFF" Offset="0.45"/>
+          <GradientStop Color="#44B57BFF" Offset="1"/>
         </LinearGradientBrush>
       </Border.BorderBrush>
-      <Border.BorderThickness>1</Border.BorderThickness>
       <Border.Effect>
-        <DropShadowEffect Color="#000000" BlurRadius="24" ShadowDepth="0" Opacity="0.55"/>
+        <DropShadowEffect Color="#000000" BlurRadius="32" ShadowDepth="4" Direction="270" Opacity="0.62"/>
       </Border.Effect>
-
-      <StackPanel Margin="16,14,16,14">
-
-        <Grid>
-          <StackPanel Orientation="Horizontal">
-            <Grid Width="34" Height="34" VerticalAlignment="Center">
-              <Ellipse>
-                <Ellipse.Fill>
-                  <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#FF4C8DFF" Offset="0"/>
-                    <GradientStop Color="#FFB57BFF" Offset="1"/>
-                  </LinearGradientBrush>
-                </Ellipse.Fill>
-              </Ellipse>
-              <TextBlock x:Name="Initial" Text="C" Foreground="White" FontSize="16"
-                         FontWeight="SemiBold" FontFamily="Segoe UI"
-                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      <Grid>
+        <Rectangle RadiusX="19" RadiusY="19" Height="90" VerticalAlignment="Top" Margin="1" IsHitTestVisible="False">
+          <Rectangle.Fill>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+              <GradientStop Color="#16FFFFFF" Offset="0"/>
+              <GradientStop Color="#00FFFFFF" Offset="1"/>
+            </LinearGradientBrush>
+          </Rectangle.Fill>
+        </Rectangle>
+        <Border Margin="1" CornerRadius="19" BorderThickness="1" IsHitTestVisible="False">
+          <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+              <GradientStop Color="#3AFFFFFF" Offset="0"/>
+              <GradientStop Color="#00FFFFFF" Offset="0.35"/>
+            </LinearGradientBrush>
+          </Border.BorderBrush>
+        </Border>
+        <StackPanel Margin="18,16,18,14">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Grid Grid.Column="0" Width="36" Height="36" VerticalAlignment="Center">
+                <Ellipse>
+                  <Ellipse.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                      <GradientStop Color="#FF4C8DFF" Offset="0"/>
+                      <GradientStop Color="#FF7B84FF" Offset="0.5"/>
+                      <GradientStop Color="#FFB57BFF" Offset="1"/>
+                    </LinearGradientBrush>
+                  </Ellipse.Fill>
+                  <Ellipse.Effect>
+                    <DropShadowEffect Color="#7B84FF" BlurRadius="14" ShadowDepth="0" Opacity="0.55"/>
+                  </Ellipse.Effect>
+                </Ellipse>
+                <Ellipse>
+                  <Ellipse.Fill>
+                    <RadialGradientBrush GradientOrigin="0.5,0.0" Center="0.5,0.1" RadiusX="0.75" RadiusY="0.75">
+                      <GradientStop Color="#55FFFFFF" Offset="0"/>
+                      <GradientStop Color="#00FFFFFF" Offset="1"/>
+                    </RadialGradientBrush>
+                  </Ellipse.Fill>
+                </Ellipse>
+                <Ellipse Stroke="#48FFFFFF" StrokeThickness="1"/>
+                <TextBlock x:Name="Initial" Text="C" Foreground="White" FontSize="16"
+                           FontWeight="SemiBold" FontFamily="Segoe UI"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </Grid>
+              <StackPanel Grid.Column="1" Margin="10,0,8,0" VerticalAlignment="Center">
+                <TextBlock x:Name="UserName" Text="Claude" Foreground="#FFF5F5FA"
+                           FontSize="14" FontWeight="SemiBold" FontFamily="Segoe UI"
+                           TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                <Border x:Name="PlanBadge" CornerRadius="7" Padding="7,2,7,2"
+                        HorizontalAlignment="Left" Margin="0,4,0,0" BorderThickness="1">
+                  <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                      <GradientStop Color="#38B57BFF" Offset="0"/>
+                      <GradientStop Color="#2C4C8DFF" Offset="1"/>
+                    </LinearGradientBrush>
+                  </Border.Background>
+                  <Border.BorderBrush>
+                    <SolidColorBrush Color="#3CCBB6FF"/>
+                  </Border.BorderBrush>
+                  <TextBlock x:Name="PlanText" Text="" Foreground="#FFDCCBFF" FontSize="9"
+                             FontWeight="Bold" FontFamily="Segoe UI"/>
+                </Border>
+              </StackPanel>
             </Grid>
-            <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
-              <TextBlock x:Name="UserName" Text="Claude" Foreground="#FFF2F2F6"
-                         FontSize="14" FontWeight="SemiBold" FontFamily="Segoe UI"/>
-              <Border x:Name="PlanBadge" Background="#33B57BFF" CornerRadius="4"
-                      Padding="6,1,6,1" HorizontalAlignment="Left" Margin="0,3,0,0">
-                <TextBlock x:Name="PlanText" Text="" Foreground="#FFCBB6FF" FontSize="9"
-                           FontWeight="Bold" FontFamily="Segoe UI"/>
-              </Border>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="6,0,0,0">
+              <TextBlock x:Name="MinBtn" Text="&#x2212;" Foreground="#FF9A9AB0" FontSize="15"
+                         FontFamily="Segoe UI" Cursor="Hand" Background="Transparent"
+                         Padding="4,0,4,4" Margin="0,-3,4,0" ToolTip="Kucult"/>
+              <TextBlock x:Name="RefreshBtn" Text="&#x21bb;" Foreground="#FF9A9AB0" FontSize="14"
+                         FontFamily="Segoe UI" Cursor="Hand" Background="Transparent"
+                         Padding="4,0,4,4" Margin="0,-1,4,0"
+                         RenderTransformOrigin="0.5,0.5" ToolTip="Yenile">
+                <TextBlock.RenderTransform><RotateTransform x:Name="SpinT" Angle="0"/></TextBlock.RenderTransform>
+              </TextBlock>
+              <TextBlock x:Name="CloseBtn" Text="&#x2715;" Foreground="#FF9A9AB0" FontSize="12"
+                         FontFamily="Segoe UI" Cursor="Hand" Background="Transparent"
+                         Padding="4,1,2,4" ToolTip="Kapat"/>
             </StackPanel>
-          </StackPanel>
-
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <TextBlock x:Name="MinBtn" Text="&#x2212;" Foreground="#FF9A9AA6" FontSize="16"
-                       FontFamily="Segoe UI" Cursor="Hand" Margin="0,-3,12,0" ToolTip="Kucult"/>
-            <TextBlock x:Name="RefreshBtn" Text="&#x21bb;" Foreground="#FF9A9AA6" FontSize="16"
-                       FontFamily="Segoe UI" Cursor="Hand" Margin="0,0,12,0"
-                       RenderTransformOrigin="0.5,0.5" ToolTip="Yenile">
-              <TextBlock.RenderTransform><RotateTransform x:Name="SpinT" Angle="0"/></TextBlock.RenderTransform>
-            </TextBlock>
-            <TextBlock x:Name="CloseBtn" Text="&#x2715;" Foreground="#FF9A9AA6" FontSize="13"
-                       FontFamily="Segoe UI" Cursor="Hand" ToolTip="Kapat"/>
-          </StackPanel>
-        </Grid>
-
-        <Grid Margin="0,18,0,4">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/>
-          </Grid.ColumnDefinitions>
-
-          <StackPanel Grid.Column="0">
-            <Grid Width="78" Height="78">
-              <Ellipse Width="64" Height="64" Stroke="#FF2C2C36" StrokeThickness="7"/>
-              <Path x:Name="ArcA" Stroke="#FF4C8DFF" StrokeThickness="7" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
-                <Path.Effect><DropShadowEffect Color="#4C8DFF" BlurRadius="9" ShadowDepth="0" Opacity="0.7"/></Path.Effect>
-              </Path>
-              <TextBlock x:Name="PctA" Text="0%" Foreground="#FFF2F2F6" FontSize="16" FontWeight="SemiBold"
-                         FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Grid>
+          <Grid Margin="0,18,0,2">
+            <Ellipse IsHitTestVisible="False" Margin="4,-6,4,-2">
+              <Ellipse.Fill>
+                <RadialGradientBrush>
+                  <GradientStop Color="#264C8DFF" Offset="0"/>
+                  <GradientStop Color="#12B57BFF" Offset="0.55"/>
+                  <GradientStop Color="#00000000" Offset="1"/>
+                </RadialGradientBrush>
+              </Ellipse.Fill>
+            </Ellipse>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <Grid Width="78" Height="78">
+                  <Ellipse Width="52" Height="52" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse.Fill>
+                      <RadialGradientBrush>
+                        <GradientStop Color="#264C8DFF" Offset="0"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                      </RadialGradientBrush>
+                    </Ellipse.Fill>
+                  </Ellipse>
+                  <Ellipse Width="64" Height="64" Stroke="#FF262631" StrokeThickness="6"/>
+                  <Path x:Name="ArcA" Stroke="#4C8DFF" StrokeThickness="6" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+                    <Path.Effect><DropShadowEffect Color="#4C8DFF" BlurRadius="11" ShadowDepth="0" Opacity="0.75"/></Path.Effect>
+                  </Path>
+                  <TextBlock x:Name="PctA" Text="0%" Foreground="#FFF6F6FA" FontSize="15" FontWeight="SemiBold"
+                             FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+                <TextBlock x:Name="LblA" Text="Session" Foreground="#FFDBDBE6" FontSize="11" FontWeight="SemiBold" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,7,0,0"/>
+                <TextBlock x:Name="SubA" Text="5 hr" Foreground="#FF82829A" FontSize="9" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+              </StackPanel>
+              <StackPanel Grid.Column="1">
+                <Grid Width="78" Height="78">
+                  <Ellipse Width="52" Height="52" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse.Fill>
+                      <RadialGradientBrush>
+                        <GradientStop Color="#26B57BFF" Offset="0"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                      </RadialGradientBrush>
+                    </Ellipse.Fill>
+                  </Ellipse>
+                  <Ellipse Width="64" Height="64" Stroke="#FF262631" StrokeThickness="6"/>
+                  <Path x:Name="ArcB" Stroke="#B57BFF" StrokeThickness="6" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+                    <Path.Effect><DropShadowEffect Color="#B57BFF" BlurRadius="11" ShadowDepth="0" Opacity="0.75"/></Path.Effect>
+                  </Path>
+                  <TextBlock x:Name="PctB" Text="0%" Foreground="#FFF6F6FA" FontSize="15" FontWeight="SemiBold"
+                             FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+                <TextBlock x:Name="LblB" Text="Weekly" Foreground="#FFDBDBE6" FontSize="11" FontWeight="SemiBold" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,7,0,0"/>
+                <TextBlock x:Name="SubB" Text="7 day" Foreground="#FF82829A" FontSize="9" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+              </StackPanel>
+              <StackPanel Grid.Column="2">
+                <Grid Width="78" Height="78">
+                  <Ellipse Width="52" Height="52" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse.Fill>
+                      <RadialGradientBrush>
+                        <GradientStop Color="#262FD9C5" Offset="0"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                      </RadialGradientBrush>
+                    </Ellipse.Fill>
+                  </Ellipse>
+                  <Ellipse Width="64" Height="64" Stroke="#FF262631" StrokeThickness="6"/>
+                  <Path x:Name="ArcC" Stroke="#2FD9C5" StrokeThickness="6" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+                    <Path.Effect><DropShadowEffect Color="#2FD9C5" BlurRadius="11" ShadowDepth="0" Opacity="0.75"/></Path.Effect>
+                  </Path>
+                  <TextBlock x:Name="PctC" Text="0%" Foreground="#FFF6F6FA" FontSize="15" FontWeight="SemiBold"
+                             FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+                <TextBlock x:Name="LblC" Text="Model" Foreground="#FFDBDBE6" FontSize="11" FontWeight="SemiBold" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,7,0,0"/>
+                <TextBlock x:Name="SubC" Text="7 day" Foreground="#FF82829A" FontSize="9" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+              </StackPanel>
             </Grid>
-            <TextBlock Text="Session" Foreground="#FFAFAFBA" FontSize="10" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,4,0,0"/>
-            <TextBlock Text="5 hr" Foreground="#FF74747E" FontSize="9" FontFamily="Segoe UI" HorizontalAlignment="Center"/>
-          </StackPanel>
-
-          <StackPanel Grid.Column="1">
-            <Grid Width="78" Height="78">
-              <Ellipse Width="64" Height="64" Stroke="#FF2C2C36" StrokeThickness="7"/>
-              <Path x:Name="ArcB" Stroke="#FFB57BFF" StrokeThickness="7" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
-                <Path.Effect><DropShadowEffect Color="#B57BFF" BlurRadius="9" ShadowDepth="0" Opacity="0.7"/></Path.Effect>
-              </Path>
-              <TextBlock x:Name="PctB" Text="0%" Foreground="#FFF2F2F6" FontSize="16" FontWeight="SemiBold"
-                         FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Grid>
-            <TextBlock Text="Weekly" Foreground="#FFAFAFBA" FontSize="10" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,4,0,0"/>
-            <TextBlock Text="7 day" Foreground="#FF74747E" FontSize="9" FontFamily="Segoe UI" HorizontalAlignment="Center"/>
-          </StackPanel>
-
-          <StackPanel Grid.Column="2">
-            <Grid Width="78" Height="78">
-              <Ellipse Width="64" Height="64" Stroke="#FF2C2C36" StrokeThickness="7"/>
-              <Path x:Name="ArcC" Stroke="#FF2FD9C5" StrokeThickness="7" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
-                <Path.Effect><DropShadowEffect Color="#2FD9C5" BlurRadius="9" ShadowDepth="0" Opacity="0.7"/></Path.Effect>
-              </Path>
-              <TextBlock x:Name="PctC" Text="0%" Foreground="#FFF2F2F6" FontSize="16" FontWeight="SemiBold"
-                         FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Grid>
-            <TextBlock Text="Sonnet" Foreground="#FFAFAFBA" FontSize="10" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,4,0,0"/>
-            <TextBlock Text="7 day" Foreground="#FF74747E" FontSize="9" FontFamily="Segoe UI" HorizontalAlignment="Center"/>
-          </StackPanel>
-        </Grid>
-
-        <Border Height="1" Background="#22FFFFFF" Margin="0,16,0,8"/>
-
-        <Grid>
-          <TextBlock x:Name="Resets" Text="" Foreground="#FF8A8A94" FontSize="10" FontFamily="Segoe UI" HorizontalAlignment="Left"/>
-          <TextBlock x:Name="Status" Text="" Foreground="#FF6E6E78" FontSize="10" FontFamily="Segoe UI" HorizontalAlignment="Right"/>
-        </Grid>
-        <TextBlock x:Name="Tokens" Text="" Foreground="#FF6E6E78" FontSize="10" FontFamily="Segoe UI" Margin="0,3,0,0"/>
-      </StackPanel>
+          </Grid>
+          <Rectangle Height="1" Margin="0,15,0,10">
+            <Rectangle.Fill>
+              <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Color="#00FFFFFF" Offset="0"/>
+                <GradientStop Color="#2AFFFFFF" Offset="0.5"/>
+                <GradientStop Color="#00FFFFFF" Offset="1"/>
+              </LinearGradientBrush>
+            </Rectangle.Fill>
+          </Rectangle>
+          <TextBlock x:Name="Tokens" Text="" Foreground="#FF9C9CB2" FontSize="10" FontFamily="Segoe UI"
+                     TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+          <TextBlock x:Name="Status" Text="" Foreground="#FF6A6A80" FontSize="9" FontFamily="Segoe UI"
+                     HorizontalAlignment="Right" Margin="0,5,0,0"/>
+        </StackPanel>
+      </Grid>
     </Border>
-
-    <!-- ================= KUCULTULMUS YUVARLAK ================= -->
-    <Border x:Name="Mini" Margin="16" Width="84" Height="84" CornerRadius="42" Visibility="Collapsed" Cursor="Hand" ToolTip="Ac">
+    <Border x:Name="Mini" Margin="18" Width="84" Height="84" CornerRadius="42"
+            Visibility="Collapsed" Cursor="Hand" ToolTip="Ac" BorderThickness="1.5">
       <Border.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-          <GradientStop Color="#FF2A2A38" Offset="0"/>
-          <GradientStop Color="#FF17171F" Offset="1"/>
-        </LinearGradientBrush>
+        <RadialGradientBrush GradientOrigin="0.5,0.3" Center="0.5,0.4" RadiusX="0.8" RadiusY="0.8">
+          <GradientStop Color="#FF2B2F40" Offset="0"/>
+          <GradientStop Color="#FF191B26" Offset="0.7"/>
+          <GradientStop Color="#FF111219" Offset="1"/>
+        </RadialGradientBrush>
       </Border.Background>
       <Border.BorderBrush>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-          <GradientStop Color="#AA4C8DFF" Offset="0"/>
-          <GradientStop Color="#44FFFFFF" Offset="1"/>
+          <GradientStop Color="#B45C9CFF" Offset="0"/>
+          <GradientStop Color="#33FFFFFF" Offset="0.5"/>
+          <GradientStop Color="#66B57BFF" Offset="1"/>
         </LinearGradientBrush>
       </Border.BorderBrush>
-      <Border.BorderThickness>1.5</Border.BorderThickness>
-      <Border.Effect><DropShadowEffect Color="#4C8DFF" BlurRadius="26" ShadowDepth="0" Opacity="0.65"/></Border.Effect>
+      <Border.Effect><DropShadowEffect Color="#4C8DFF" BlurRadius="28" ShadowDepth="0" Opacity="0.6"/></Border.Effect>
       <Grid>
-        <Ellipse Width="62" Height="62" Stroke="#FF3C3C4A" StrokeThickness="8"/>
-        <Path x:Name="ArcMini" Stroke="#FF5C9CFF" StrokeThickness="8" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
-          <Path.Effect><DropShadowEffect Color="#5C9CFF" BlurRadius="14" ShadowDepth="0" Opacity="0.9"/></Path.Effect>
+        <Ellipse Width="46" Height="46" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Ellipse.Fill>
+            <RadialGradientBrush>
+              <GradientStop Color="#304C8DFF" Offset="0"/>
+              <GradientStop Color="#00000000" Offset="1"/>
+            </RadialGradientBrush>
+          </Ellipse.Fill>
+        </Ellipse>
+        <Ellipse Width="62" Height="62" Stroke="#FF2B2B38" StrokeThickness="7"/>
+        <Path x:Name="ArcMini" Stroke="#FF5C9CFF" StrokeThickness="7" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+          <Path.Effect><DropShadowEffect Color="#5C9CFF" BlurRadius="13" ShadowDepth="0" Opacity="0.85"/></Path.Effect>
         </Path>
-        <TextBlock x:Name="PctMini" Text="0%" Foreground="#FFFFFFFF" FontSize="19" FontWeight="Bold"
+        <TextBlock x:Name="PctMini" Text="0%" Foreground="#FFFFFFFF" FontSize="18" FontWeight="Bold"
                    FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center"/>
       </Grid>
     </Border>
-
   </Grid>
 </Window>
 "@
@@ -189,7 +280,7 @@ $win = [Windows.Markup.XamlReader]::Load($reader)
 $ctrl = @{}
 foreach ($n in 'Full','Mini','Initial','UserName','PlanText','PlanBadge','MinBtn','RefreshBtn','CloseBtn','SpinT',
                'ArcA','ArcB','ArcC','PctA','PctB','PctC','ArcMini','PctMini',
-               'Resets','Status','Tokens') {
+               'LblA','SubA','LblB','SubB','LblC','SubC','Status','Tokens') {
   $ctrl[$n] = $win.FindName($n)
 }
 
@@ -228,6 +319,14 @@ function Draw-Rings {
   $ctrl.PctMini.Text = ("{0:0}%" -f $script:cur['A'])
 }
 
+# halka rengi: normalde kimlik rengi, yuksek kullanimda sari (>=75) / kirmizi (>=90)
+function Set-RingColor([string]$k, [double]$pct, [string]$base) {
+  $hex = if ($pct -ge 90) { '#FFFF5C6B' } elseif ($pct -ge 75) { '#FFFFB454' } else { $base }
+  $c = [System.Windows.Media.Color][System.Windows.Media.ColorConverter]::ConvertFromString($hex)
+  $ctrl["Arc$k"].Stroke = New-Object System.Windows.Media.SolidColorBrush($c)
+  if ($ctrl["Arc$k"].Effect) { $ctrl["Arc$k"].Effect.Color = $c }
+}
+
 # ---------- API ----------
 function Get-Token { (Get-Content $credPath -Raw | ConvertFrom-Json).claudeAiOauth.accessToken }
 function Get-Headers { @{ 'Authorization'="Bearer $(Get-Token)"; 'anthropic-beta'='oauth-2025-04-20'; 'Content-Type'='application/json' } }
@@ -237,6 +336,7 @@ function Format-Reset($iso) {
   try {
     $span = [datetimeoffset]::Parse($iso) - [datetimeoffset]::Now
     if ($span.TotalSeconds -le 0) { return "now" }
+    if ($span.TotalDays  -ge 1) { return ("{0}d {1}h" -f [int]$span.TotalDays, $span.Hours) }
     if ($span.TotalHours -ge 1) { return ("{0}h {1}m" -f [int]$span.TotalHours, $span.Minutes) }
     return ("{0}m" -f [int]$span.TotalMinutes)
   } catch { return $null }
@@ -261,19 +361,53 @@ function Update-Usage {
   $ctrl.SpinT.BeginAnimation([System.Windows.Media.RotateTransform]::AngleProperty, $spin)
   try {
     $r = Invoke-RestMethod -Uri $usageUrl -Headers (Get-Headers) -Method Get -TimeoutSec 15
-    $script:tgt.A = [double]$r.five_hour.utilization
-    $script:tgt.B = [double]$r.seven_day.utilization
-    $script:tgt.C = if ($r.seven_day_sonnet) { [double]$r.seven_day_sonnet.utilization } else { 0.0 }
-    $r5 = Format-Reset $r.five_hour.resets_at
-    $r7 = Format-Reset $r.seven_day.resets_at
-    $parts = @()
-    if ($r5) { $parts += "5h: $r5" }
-    if ($r7) { $parts += "7d: $r7" }
-    $ctrl.Resets.Text = ($parts -join "   ")
+
+    # ---- yeni 'limits' dizisi: session / weekly_all / weekly_scoped(model) ----
+    $sPct=0.0; $sRst=$null
+    $wPct=0.0; $wRst=$null
+    $mPct=0.0; $mRst=$null; $mName=$null; $mSeen=$false
+
+    if ($r.limits) {
+      foreach ($l in $r.limits) {
+        $p = [double]$l.percent
+        switch ($l.kind) {
+          'session'    { $sPct=$p; $sRst=$l.resets_at }
+          'weekly_all' { $wPct=$p; $wRst=$l.resets_at }
+          'weekly_scoped' {
+            # birden fazla modele-ozel limit gelirse en yuksek kullanimliyi goster
+            if (-not $mSeen -or $p -ge $mPct) {
+              $mPct=$p; $mRst=$l.resets_at; $mSeen=$true
+              if ($l.scope.model.display_name) { $mName=$l.scope.model.display_name }
+            }
+          }
+        }
+      }
+    } else {
+      # eski API alanlarina geri donus
+      $sPct=[double]$r.five_hour.utilization; $sRst=$r.five_hour.resets_at
+      $wPct=[double]$r.seven_day.utilization;  $wRst=$r.seven_day.resets_at
+    }
+    if (-not $mSeen) {
+      if     ($r.seven_day_opus)   { $mPct=[double]$r.seven_day_opus.utilization;   $mRst=$r.seven_day_opus.resets_at;   $mName='Opus' }
+      elseif ($r.seven_day_sonnet) { $mPct=[double]$r.seven_day_sonnet.utilization; $mRst=$r.seven_day_sonnet.resets_at; $mName='Sonnet' }
+    }
+
+    $script:tgt.A=$sPct; $script:tgt.B=$wPct; $script:tgt.C=$mPct
+
+    Set-RingColor 'A'    $sPct '#FF4C8DFF'
+    Set-RingColor 'B'    $wPct '#FFB57BFF'
+    Set-RingColor 'C'    $mPct '#FF2FD9C5'
+    Set-RingColor 'Mini' $sPct '#FF5C9CFF'
+
+    $ra=Format-Reset $sRst; $ctrl.SubA.Text = if ($ra) { $ra } else { '5 hr' }
+    $rb=Format-Reset $wRst; $ctrl.SubB.Text = if ($rb) { $rb } else { '7 day' }
+    $rc=Format-Reset $mRst; $ctrl.SubC.Text = if ($rc) { $rc } else { '7 day' }
+    $ctrl.LblC.Text = if ($mName) { $mName } else { 'Model' }
+
     $ctrl.Status.Text = "updated " + (Get-Date -Format "HH:mm")
     $script:everOk = $true
     $script:animTimer.Start()
-    if ($refreshTimer) { $refreshTimer.Interval = [TimeSpan]::FromSeconds(120) }   # basari: normal arali ga don
+    if ($refreshTimer) { $refreshTimer.Interval = [TimeSpan]::FromSeconds(120) }   # basari: normal araliga don
   } catch {
     # Hata: mevcut halka degerlerini KORU (sifirlama)
     $msg = $_.Exception.Message

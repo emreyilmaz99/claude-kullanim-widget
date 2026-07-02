@@ -10,9 +10,10 @@ Claude (Pro / Max) kullanım limitlerini masaüstünde **her zaman üstte** gös
 
 ## Görünüm
 
-- 3 dairesel **donut halka**: Session (5 saat), Weekly (7 gün), Sonnet (7 gün)
+- 3 dairesel **donut halka**: Session (5 saat), Weekly (7 gün) ve modele özel haftalık limit (ör. `Fable` / `Opus` / `Sonnet`) — API'nin `limits` dizisinden **dinamik** okunur
+- Kullanım arttıkça halka rengi değişir: normal → **sarı** (≥%75) → **kırmızı** (≥%90)
+- Her halkanın altında canlı **reset geri sayımı** (ör. `4h 17m`, `5d 0h`)
 - Avatar + isim + plan rozeti (ör. `MAX 5x`) — profilden otomatik
-- Reset süreleri + son güncelleme saati
 - `bugün ~X token · ~$Y (API eşdeğeri)` — yerel oturum dosyalarından
 - **Küçültme modu**: tıklayınca küçük bir yuvarlağa iner, yuvarlağa tıklayınca tekrar açılır
 - Her yerinden sürüklenebilir, akıcı dolum animasyonları, neon glow
