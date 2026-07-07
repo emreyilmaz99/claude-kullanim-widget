@@ -4,3 +4,7 @@ debug.log
 stderr.log
 task_stdout.log
 *.log
+
+# .NET derleme ciktilari
+ClaudeUsageWidget/bin/
+ClaudeUsageWidget/obj/

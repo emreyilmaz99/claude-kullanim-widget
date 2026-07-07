@@ -38,6 +38,38 @@ $s.TargetPath = "$env:USERPROFILE\claude-kullanim-widget\start.vbs"
 $s.Save()
 ```
 
+## C# / WPF sürümü (önerilen)
+
+Aynı widget'ın C# sürümü [ClaudeUsageWidget/](ClaudeUsageWidget/) klasöründedir. İki görünüm (donut halkalar / araba hız göstergesi), ayarlanabilir renk paleti, arka plan saydamlığı, Windows'ta otomatik başlatma ve otomatik güncelleme bildirimi içerir.
+
+**Kullanıcılar için (kurulum yok):** [Releases](https://github.com/emreyilmaz99/claude-kullanim-widget/releases/latest) sayfasından `ClaudeUsageWidget-vX.Y.Z.exe` dosyasını indirip çift tıkla. Kendinden-yeterli (self-contained) tek dosyadır; .NET kurmaya gerek yok.
+
+**Derlemek için** .NET 8 SDK:
+
+```powershell
+dotnet build ClaudeUsageWidget -c Release
+.\ClaudeUsageWidget\bin\Release\net8.0-windows\ClaudeUsageWidget.exe
+```
+
+- `start.vbs`'e gerek yok — exe konsol penceresi açmadan başlar.
+- PowerShell sürümüyle aynı mutex'i kullanır; ikisi aynı anda çalışmaz, ikinci kopya mevcut pencereyi öne getirir.
+- Ayarlardan (⚙) "Windows açılışında başlat" seçeneğiyle otomatik başlatılabilir.
+
+### Otomatik güncelleme
+
+- Widget açılışta GitHub'daki **son sürümü** kontrol eder. Daha yeni bir sürüm varsa ayarlar dişlisinde kırmızı bir nokta ve ayar panelinde "⭳ Güncelleme: vX.Y.Z" bağlantısı çıkar; tıklayınca indirme sayfası açılır. Sürüm numarası ayar panelinin altında görünür.
+
+### Yeni sürüm yayınlama (maintainer)
+
+Yeni bir sürüm çıkarmak için sadece **etiket (tag)** gönder — gerisini [GitHub Actions](.github/workflows/release.yml) halleder (self-contained exe derler ve Release'e ekler):
+
+```powershell
+git tag v1.0.1
+git push origin v1.0.1
+```
+
+Etiketteki sürüm numarası exe'ye gömülür; eski sürümü çalıştıran kullanıcılar bir sonraki açılışta güncelleme bildirimini görür. (Sürüm sırasını korumak için etiketleri artan ver: `v1.0.1`, `v1.0.2`, …)
+
 ## Nasıl çalışır
 
 - `~/.claude/.credentials.json` → OAuth access token (her sorguda taze okunur, Claude Code yeniledikçe güncel kalır)

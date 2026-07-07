@@ -1,0 +1,51 @@
+name: release
+
+# v1.2.3 gibi bir etiket (tag) gonderildiginde tetiklenir:
+#   git tag v1.0.1 && git push origin v1.0.1
+# Tek dosya, kendinden-yeterli (self-contained) exe uretip Release'e ekler.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Sürümü etiketten al
+        id: ver
+        shell: bash
+        run: echo "v=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Yayınla (self-contained tek dosya)
+        run: >
+          dotnet publish ClaudeUsageWidget/ClaudeUsageWidget.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true
+          -p:Version=${{ steps.ver.outputs.v }}
+          -o publish
+
+      - name: Exe'yi sürümle adlandır
+        shell: bash
+        run: cp publish/ClaudeUsageWidget.exe "ClaudeUsageWidget-${GITHUB_REF_NAME}.exe"
+
+      - name: Release oluştur ve exe'yi ekle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: >
+          gh release create "${GITHUB_REF_NAME}"
+          "ClaudeUsageWidget-${GITHUB_REF_NAME}.exe"
+          --title "${GITHUB_REF_NAME}"
+          --generate-notes

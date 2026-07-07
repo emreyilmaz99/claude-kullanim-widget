@@ -331,20 +331,28 @@ function Set-RingColor([string]$k, [double]$pct, [string]$base) {
 function Get-Token { (Get-Content $credPath -Raw | ConvertFrom-Json).claudeAiOauth.accessToken }
 function Get-Headers { @{ 'Authorization'="Bearer $(Get-Token)"; 'anthropic-beta'='oauth-2025-04-20'; 'Content-Type'='application/json' } }
 
+# PS 5.1 Invoke-RestMethod charset'siz yanitlari ISO-8859-1 cozup Turkce karakterleri bozuyor;
+# ham baytlari alip UTF-8 olarak coz
+function Invoke-JsonApi([string]$url) {
+  $resp = Invoke-WebRequest -Uri $url -Headers (Get-Headers) -Method Get -TimeoutSec 15 -UseBasicParsing
+  [System.Text.Encoding]::UTF8.GetString($resp.RawContentStream.ToArray()) | ConvertFrom-Json
+}
+
 function Format-Reset($iso) {
   if ([string]::IsNullOrEmpty($iso)) { return $null }
   try {
     $span = [datetimeoffset]::Parse($iso) - [datetimeoffset]::Now
     if ($span.TotalSeconds -le 0) { return "now" }
-    if ($span.TotalDays  -ge 1) { return ("{0}d {1}h" -f [int]$span.TotalDays, $span.Hours) }
-    if ($span.TotalHours -ge 1) { return ("{0}h {1}m" -f [int]$span.TotalHours, $span.Minutes) }
-    return ("{0}m" -f [int]$span.TotalMinutes)
+    # [int] en yakina yuvarladigi icin 1h43m -> "2h" oluyordu; Floor sart
+    if ($span.TotalDays  -ge 1) { return ("{0}d {1}h" -f [math]::Floor($span.TotalDays), $span.Hours) }
+    if ($span.TotalHours -ge 1) { return ("{0}h {1}m" -f [math]::Floor($span.TotalHours), $span.Minutes) }
+    return ("{0}m" -f [math]::Floor($span.TotalMinutes))
   } catch { return $null }
 }
 
 function Load-Profile {
   try {
-    $p = Invoke-RestMethod -Uri $profileUrl -Headers (Get-Headers) -Method Get -TimeoutSec 15
+    $p = Invoke-JsonApi $profileUrl
     $name = if ($p.account.display_name) { $p.account.display_name } elseif ($p.account.full_name) { $p.account.full_name } else { "Claude" }
     $ctrl.UserName.Text = $name
     $ctrl.Initial.Text  = ($name.Substring(0,1)).ToUpper()
@@ -360,7 +368,7 @@ function Update-Usage {
   $spin = New-Object System.Windows.Media.Animation.DoubleAnimation(0, 360, ([timespan]::FromMilliseconds(600)))
   $ctrl.SpinT.BeginAnimation([System.Windows.Media.RotateTransform]::AngleProperty, $spin)
   try {
-    $r = Invoke-RestMethod -Uri $usageUrl -Headers (Get-Headers) -Method Get -TimeoutSec 15
+    $r = Invoke-JsonApi $usageUrl
 
     # ---- yeni 'limits' dizisi: session / weekly_all / weekly_scoped(model) ----
     $sPct=0.0; $sRst=$null
