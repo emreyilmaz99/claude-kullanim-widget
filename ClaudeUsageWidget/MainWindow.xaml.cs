@@ -116,7 +116,7 @@ public partial class MainWindow : Window
         UpdateViewVisibility();
 
         ApplyBgOpacity(_settings.opacity, 0);   // saydamlik yalniz arka plan panellerine
-        if (_settings.autostart) SetAutostart(true);   // yol degismis olabilir: tazele
+        SetAutostart(_settings.autostart);      // registry'yi ayarla ile daima esitle (acikken yol tazelenir, kapaliyken kalinti silinir)
         ApplyPalette();
 
         _animTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };

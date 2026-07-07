@@ -44,8 +44,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
-        run: >
-          gh release create "${GITHUB_REF_NAME}"
-          "ClaudeUsageWidget-${GITHUB_REF_NAME}.exe"
-          --title "${GITHUB_REF_NAME}"
-          --generate-notes
+        run: |
+          # Ayni etiket icin release zaten varsa once sil (tag'i KORU), sonra yeniden olustur.
+          # Boylece is akisi tekrar tetiklenirse "release zaten var" hatasi vermez.
+          gh release delete "${GITHUB_REF_NAME}" --yes || true
+          gh release create "${GITHUB_REF_NAME}" \
+            "ClaudeUsageWidget-${GITHUB_REF_NAME}.exe" \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes
