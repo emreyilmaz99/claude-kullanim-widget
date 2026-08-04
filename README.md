@@ -42,7 +42,9 @@ $s.Save()
 
 Aynı widget'ın C# sürümü [ClaudeUsageWidget/](ClaudeUsageWidget/) klasöründedir. İki görünüm (donut halkalar / araba hız göstergesi), ayarlanabilir renk paleti, arka plan saydamlığı, Windows'ta otomatik başlatma ve otomatik güncelleme bildirimi içerir.
 
-**Kullanıcılar için (kurulum yok):** [Releases](https://github.com/emreyilmaz99/claude-kullanim-widget/releases/latest) sayfasından `ClaudeUsageWidget-vX.Y.Z.exe` dosyasını indirip çift tıkla. Kendinden-yeterli (self-contained) tek dosyadır; .NET kurmaya gerek yok.
+**Kullanıcılar için:** [Releases](https://github.com/emreyilmaz99/claude-kullanim-widget/releases/latest) sayfasından `ClaudeUsageWidget-vX.Y.Z.exe` dosyasını indirip çift tıkla. Küçük, tek dosyalık bir exe'dir.
+
+Bir kereye mahsus **[.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0)** (x64) gerekir — yoksa exe'yi ilk çalıştırdığında Windows otomatik olarak indirme bağlantısı gösterir. (Not: exe imzasız olduğu için antivirüs nadiren "yanlış pozitif" verebilir; framework-dependent olduğundan bu ihtimal çok düşüktür, gerekirse dosyaya izin ver.)
 
 **Derlemek için** .NET 8 SDK:
 

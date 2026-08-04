@@ -26,13 +26,13 @@ jobs:
         shell: bash
         run: echo "v=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
-      - name: Yayınla (self-contained tek dosya)
+      - name: Yayınla (framework-dependent tek dosya)
+        # self-contained DEGIL: exe kendini temp'e acmaz, antivirus yanlis-pozitifi cok azalir.
+        # Kullanici bir kez .NET 8 Desktop Runtime kurar (yoksa Windows otomatik indirme linki verir).
         run: >
           dotnet publish ClaudeUsageWidget/ClaudeUsageWidget.csproj
-          -c Release -r win-x64 --self-contained true
+          -c Release -r win-x64 --self-contained false
           -p:PublishSingleFile=true
-          -p:IncludeNativeLibrariesForSelfExtract=true
-          -p:EnableCompressionInSingleFile=true
           -p:Version=${{ steps.ver.outputs.v }}
           -o publish
 
